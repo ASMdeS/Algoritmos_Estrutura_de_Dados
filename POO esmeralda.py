@@ -46,8 +46,10 @@ class lista_encadeada:
                 if current.numero == node_empurrado.numero:
                     if current.numero == next.numero:
                         print(f"Não existe Node depois de {current.numero}")
-                    if next.numero == last.numero:
-                        last = None
+                        break
+                    if last:
+                        if next.numero == last.numero:
+                            last = None
                     previous.proximo_numero = next
                     next.proximo_numero = current
                     current.proximo_numero = last
@@ -74,15 +76,25 @@ class lista_encadeada:
         else:
             while current:
                 if current.numero == node_empurrado.numero:
-                    if first.proximo_numero:
-                        first.proximo_numero = current
-                    current = previous
-                    current.proximo_numero = next
-                    if first.proximo_numero:
-                        previous = first.proximo_numero
-                    previous.proximo_numero = current
-                    current.proximo_numero = next
-                    break
+                    print(current.numero)
+                    print(previous.numero)
+                    print(next.numero)
+                    if previous == self.head:
+                        current = previous
+                        previous = previous.proximo_numero
+                        if current.proximo_numero:
+                            current.proximo_numero = next
+                    else:
+                        if first and first.proximo_numero:
+                            first.proximo_numero = current
+                        current = previous
+                        current.proximo_numero = next
+                        if first and first.proximo_numero:
+                            previous = first.proximo_numero
+                        previous.proximo_numero = current
+                        current.proximo_numero = next
+                        print(f"Node {numero} puxado")
+                        break
                 else:
                     if previous:
                         first = previous
@@ -130,20 +142,28 @@ Mapa = lista_encadeada()
 entrada = None
 entrada = None
 
-while entrada != "fim!":
-    entrada = input()
-    if entrada != "fim!":
-        lista_entrada = entrada.split(":")
-        numero = lista_entrada[0]
-        instrucao = lista_entrada[1]
+#while entrada != "fim!":
+    #entrada = input()
+    #if entrada != "fim!":
+        #lista_entrada = entrada.split(":")
+        #numero = lista_entrada[0]
+        #instrucao = lista_entrada[1]
 
-        if instrucao == "adicione-me!":
-            Mapa.adicionar(numero)
-        elif instrucao == "remova-me!":
-            Mapa.remover(numero)
-        elif instrucao == "empurre-me!":
-            Mapa.empurrar(numero)
-        elif instrucao == "puxe-me!":
-            Mapa.puxar(numero)
-    else:
-        print(Mapa)
+        #if instrucao == "adicione-me!":
+          #  Mapa.adicionar(numero)
+        #elif instrucao == "remova-me!":
+           # Mapa.remover(numero)
+      #  elif instrucao == "empurre-me!":
+       #     Mapa.empurrar(numero)
+        #elif instrucao == "puxe-me!":
+         #   Mapa.puxar(numero)
+    #else:
+     #   print(Mapa)
+
+Mapa.adicionar(1)
+Mapa.adicionar(2)
+Mapa.adicionar(3)
+Mapa.adicionar(4)
+Mapa.adicionar(5)
+Mapa.puxar(2)
+print(Mapa)
