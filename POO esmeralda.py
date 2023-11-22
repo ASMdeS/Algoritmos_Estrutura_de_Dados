@@ -4,6 +4,7 @@ class Node:
         self.numero = numero
         self.proximo_numero = None
 
+
 class lista_encadeada:
 
     def __init__(self):
@@ -21,6 +22,7 @@ class lista_encadeada:
                 current = current.proximo_numero
             current = novo_node
             previous.proximo_numero = current
+        print(f"Node {numero} adicionado")
 
     def empurrar(self, numero):
         node_empurrado = Node(numero)
@@ -38,14 +40,18 @@ class lista_encadeada:
             current.proximo_numero = next
             next.proximo_numero = last
             self.head = current
+            print(f"Node {numero} empurrado")
         else:
             while current:
                 if current.numero == node_empurrado.numero:
+                    if current.numero == next.numero:
+                        print(f"Não existe Node depois de {current.numero}")
                     if next.numero == last.numero:
                         last = None
                     previous.proximo_numero = next
                     next.proximo_numero = current
                     current.proximo_numero = last
+                    print(f"Node {numero} empurrado")
                     break
                 else:
                     previous = current
@@ -54,15 +60,18 @@ class lista_encadeada:
                         next = current.proximo_numero
                     if next.proximo_numero:
                         last = next.proximo_numero
+
     def puxar(self, numero):
         node_empurrado = Node(numero)
+        current = self.head
+        previous = None
+        next = None
+        first = None
         if self.head is None:
             print(f"Node {numero} não existe")
+        elif current.numero == node_empurrado.numero:
+            print(f"Não existe node antes de {current.numero}")
         else:
-            current = self.head
-            previous = None
-            next = None
-            first = None
             while current:
                 if current.numero == node_empurrado.numero:
                     if first.proximo_numero:
@@ -83,23 +92,58 @@ class lista_encadeada:
                     if current.proximo_numero:
                         next = current.proximo_numero
 
+    def remover(self, key):
+        current = self.head
+        previous = None
+        found = False
+
+        while current and not found:
+            if current.numero == key and current is self.head:
+                found = True
+                self.head = current.proximo_numero
+            elif current.numero == key:
+                found = True
+                previous.proximo_numero = current.proximo_numero
+            else:
+                previous = current
+                current = current.proximo_numero
+        if found == True:
+            print(f"Node {key} foi removido")
+        else:
+            print(f"Node {key} não existe")
+
+        return current
 
     def __repr__(self):
         nodes = []
         current = self.head
         while current:
             if current is self.head:
-                nodes.append("Mapa:%s" % current.numero)
+                nodes.append("mapa:%s" % current.numero)
             else:
                 nodes.append("%s" % current.numero)
             current = current.proximo_numero
         return '->'.join(nodes)
 
+
 Mapa = lista_encadeada()
-Mapa.adicionar(1)
-Mapa.adicionar(2)
-Mapa.adicionar(3)
-Mapa.adicionar(4)
-Mapa.adicionar(5)
-Mapa.puxar()
-print(Mapa)
+entrada = None
+entrada = None
+
+while entrada != "fim!":
+    entrada = input()
+    if entrada != "fim!":
+        lista_entrada = entrada.split(":")
+        numero = lista_entrada[0]
+        instrucao = lista_entrada[1]
+
+        if instrucao == "adicione-me!":
+            Mapa.adicionar(numero)
+        elif instrucao == "remova-me!":
+            Mapa.remover(numero)
+        elif instrucao == "empurre-me!":
+            Mapa.empurrar(numero)
+        elif instrucao == "puxe-me!":
+            Mapa.puxar(numero)
+    else:
+        print(Mapa)
