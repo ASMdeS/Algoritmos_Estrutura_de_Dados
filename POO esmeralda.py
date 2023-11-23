@@ -1,3 +1,4 @@
+# Criar o Node
 class Node:
 
     def __init__(self, numero):
@@ -5,11 +6,13 @@ class Node:
         self.proximo_numero = None
 
 
+# Criar a lista encadeada
 class lista_encadeada:
-
+    # Definir a cabeça da lista encadeada
     def __init__(self):
         self.head = None
 
+    # Adicionar novo elemento
     def adicionar(self, numero):
         novo_node = Node(numero)
         if self.head == None:
@@ -24,6 +27,7 @@ class lista_encadeada:
             previous.proximo_numero = current
         print(f"Node {numero} adicionado")
 
+    # empurrar determinado elemento
     def empurrar(self, numero):
         previous = None
         current = self.head
@@ -33,9 +37,14 @@ class lista_encadeada:
         else:
             while current and current.numero != numero:
                 previous = current
+                if current.proximo_numero:
+                    next = current.proximo_numero
                 current = next
                 if next:
                     next = next.proximo_numero
+                # else:
+                # print(f"Não existe Node depois de {numero}")
+                # return
             if not current:
                 print(f"Node {numero} não existe")
             elif not current.proximo_numero:
@@ -60,8 +69,7 @@ class lista_encadeada:
                     next.proximo_numero = current
                     current.proximo_numero = None
 
-
-
+    # puxar determinado elemento
     def puxar(self, numero):
         first = None
         previous = None
@@ -87,8 +95,9 @@ class lista_encadeada:
                     current.proximo_numero = previous
                     self.head = current
 
-        print(f"Node {numero} puxado")
+                print(f"Node {numero} puxado")
 
+    # remover determinado elemento
     def remover(self, key):
         current = self.head
         previous = None
@@ -111,20 +120,27 @@ class lista_encadeada:
 
         return current
 
+    # definir a representação da lista encadeada
     def __repr__(self):
         nodes = []
         current = self.head
-        while current:
-            if current is self.head:
-                nodes.append("mapa:%s" % current.numero)
-            else:
-                nodes.append("%s" % current.numero)
-            current = current.proximo_numero
-        return '->'.join(nodes)
+        if current:
+            while current:
+                if current is self.head:
+                    nodes.append("mapa:%s" % current.numero)
+                else:
+                    nodes.append("%s" % current.numero)
+                current = current.proximo_numero
+            return '->'.join(nodes)
+        else:
+            return "mapa:"
 
+
+# definindo a entrada e a lista encadeada
 entrada = None
 Mapa = lista_encadeada()
 
+# trabalhando com entradas
 while entrada != "fim!":
     entrada = input()
     if entrada != "fim!":
