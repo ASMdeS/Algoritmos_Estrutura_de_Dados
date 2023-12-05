@@ -1,48 +1,51 @@
-#Criar classe Node e definir os nodes à direita e à esquerda
+# Criar classe Node e definir os nodes à direita e à esquerda
 class Node:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, valor):
+        self.valor = valor
         self.left = None
         self.right = None
 
-#Criar classe Arvore e definir raiz e as funções
+
+# Criar classe Arvore e definir raiz e as funções inserir, modificar, imprimirArvore e imprimirSubarvores
 class Arvore:
     def __init__(self):
-        self.root = None
+        self.raiz = None
+        self.lista = []
 
-    def inserir(self, value):
-        self.root = self._insert(self.root, value)
+    def inserir(self, valor):
+        self.raiz = self.modificar(self.raiz, valor)
 
-    def _insert(self, node, value):
+    def modificar(self, node, valor):
         if node is None:
-            return Node(value)
+            return Node(valor)
 
-        if value < node.value:
-            node.left = self._insert(node.left, value)
-        elif value > node.value:
-            node.right = self._insert(node.right, value)
+        if valor < node.valor:
+            node.left = self.modificar(node.left, valor)
+        elif valor > node.valor:
+            node.right = self.modificar(node.right, valor)
 
         return node
 
-    def print_in_order(self):
-        self._print_in_order(self.root)
+    def imprimirArvore(self):
+        self.imprimirSubarvores(self.raiz)
 
-    def _print_in_order(self, node):
+    def imprimirSubarvores(self, node):
         if node:
-            # Traverse the left subtree
-            self._print_in_order(node.left)
+            self.imprimirSubarvores(node.left)
+            self.lista.append(node.valor)
+            self.imprimirSubarvores(node.right)
 
-            # Print the current node's value
-            print(node.value, end=" ")
 
-            # Traverse the right subtree
-            self._print_in_order(node.right)
-
-# Example usage:
+# Definindo Arvore:
 arvore = Arvore()
-values = list(map(int, input().split()))
 
-for value in values:
-    arvore.inserir(value)
+# Definindo os valores pela input
+valores = list(map(int, input().split()))
 
-arvore.print_in_order()
+# Adicionando os valores na arvore
+for valor in valores:
+    arvore.inserir(valor)
+
+# Imprimindo a arvore
+arvore.imprimirArvore()
+print(" ".join(map(str, arvore.lista)))
