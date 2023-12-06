@@ -6,7 +6,7 @@ class Node:
         self.right = None
 
 
-# Criar classe Arvore e definir raiz e as funções inserir, modificar, imprimirArvore e imprimirSubarvores
+# Criar classe Arvore e definir raiz, lista e as funções inserir, modificar, imprimirArvore e imprimirSubarvores
 class Arvore:
     def __init__(self):
         self.raiz = None
@@ -46,6 +46,8 @@ valores = list(map(int, input().split()))
 for valor in valores:
     arvore.inserir(valor)
 
-# Imprimindo a arvore
+# Criando a lista para imprimir a arvore
 arvore.imprimirArvore()
+
+# Imprimindo a lista no formato desejado
 print(" ".join(map(str, arvore.lista)))
