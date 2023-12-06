@@ -6,6 +6,7 @@ class AVLNode:
         self.esquerda = None
         self.direita = None
 
+
 # Criando a árvore e definindo suas funções principais
 class AVLTree:
     def __init__(self):
@@ -81,19 +82,23 @@ class AVLTree:
     def inserir_chave(self, key):
         self.raiz = self.inserir(self.raiz, key)
 
-    def emOrdemReverso(self, raiz, count, sum_values):
-        if raiz and count[0] > 1:
-            self.emOrdemReverso(raiz.direita, count, sum_values)
-            sum_values[0] += raiz.key
-            count[0] -= 1
-            self.emOrdemReverso(raiz.esquerda, count, sum_values)
+    def emOrdemReverso(self, raiz, sum_values, horasDisponiveis):
+        if raiz is not None:
+            self.emOrdemReverso(raiz.direita, sum_values, horasDisponiveis)
 
-    def MaiorSoma(self, horas_disponiveis):
-        sum_values = [0]
-        count = [horas_disponiveis]
-        self.emOrdemReverso(self.raiz, count, sum_values)
-        print("valor total de conhecimento:", sum_values[0])
+            if len(sum_values) < horasDisponiveis:
+                sum_values.append(raiz.key)
+            else:
+                if raiz.key > min(sum_values):
+                    sum_values.remove(min(sum_values))
+                    sum_values.append(raiz.key)
 
+            self.emOrdemReverso(raiz.esquerda, sum_values, horasDisponiveis)
+
+    def MaiorSoma(self, horasDisponiveis):
+        sum_values = []
+        self.emOrdemReverso(self.raiz, sum_values, horasDisponiveis)
+        print("valor total de conhecimento:", sum(sum_values))
 
 
 # Inicializar a árvore
@@ -123,7 +128,6 @@ for valor in valoresCin:
 
 # Recebendo as horas disponíveis no vira-tempo
 horasDisponiveis = int(input())
-
 
 # Imprimindo a soma dos maiores valores considerando as horas disponíveis no vira-tempo
 avl_tree.MaiorSoma(horasDisponiveis)
