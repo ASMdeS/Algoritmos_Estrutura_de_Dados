@@ -2,108 +2,101 @@
 class AVLNode:
     def __init__(self, key):
         self.key = key
-        self.height = 1
-        self.left = None
-        self.right = None
+        self.altura = 1
+        self.esquerda = None
+        self.direita = None
 
-# Criando a arvore
+# Criando a árvore e definindo suas funções principais
 class AVLTree:
     def __init__(self):
-        self.root = None
+        self.raiz = None
 
-    def height(self, node):
+    def altura(self, node):
         if node is None:
             return 0
-        return node.height
+        return node.altura
 
-    def update_height(self, node):
+    def modificar_altura(self, node):
         if node is not None:
-            node.height = 1 + max(self.height(node.left), self.height(node.right))
+            node.altura = 1 + max(self.altura(node.esquerda), self.altura(node.direita))
 
     def balance_factor(self, node):
         if node is None:
             return 0
-        return self.height(node.left) - self.height(node.right)
+        return self.altura(node.esquerda) - self.altura(node.direita)
 
-    def rotate_right(self, y):
-        x = y.left
-        T2 = x.right
+    def rotacionar_direita(self, y):
+        x = y.esquerda
+        T2 = x.direita
 
-        x.right = y
-        y.left = T2
+        x.direita = y
+        y.esquerda = T2
 
-        self.update_height(y)
-        self.update_height(x)
+        self.modificar_altura(y)
+        self.modificar_altura(x)
 
         return x
 
-    def rotate_left(self, x):
-        y = x.right
-        T2 = y.left
+    def rotacionar_esquerda(self, x):
+        y = x.direita
+        T2 = y.esquerda
 
-        y.left = x
-        x.right = T2
+        y.esquerda = x
+        x.direita = T2
 
-        self.update_height(x)
-        self.update_height(y)
+        self.modificar_altura(x)
+        self.modificar_altura(y)
 
         return y
 
-    def insert(self, root, key):
-        if root is None:
+    def inserir(self, raiz, key):
+        if raiz is None:
             return AVLNode(key)
 
-        if key < root.key:
-            root.left = self.insert(root.left, key)
+        if key < raiz.key:
+            raiz.esquerda = self.inserir(raiz.esquerda, key)
         else:
-            root.right = self.insert(root.right, key)
+            raiz.direita = self.inserir(raiz.direita, key)
 
-        self.update_height(root)
+        self.modificar_altura(raiz)
 
-        balance = self.balance_factor(root)
+        balance = self.balance_factor(raiz)
 
-        # Left Heavy
         if balance > 1:
-            if key < root.left.key:
-                return self.rotate_right(root)
+            if key < raiz.esquerda.key:
+                return self.rotacionar_direita(raiz)
             else:
-                root.left = self.rotate_left(root.left)
-                return self.rotate_right(root)
+                raiz.esquerda = self.rotacionar_esquerda(raiz.esquerda)
+                return self.rotacionar_direita(raiz)
 
-        # Right Heavy
         if balance < -1:
-            if key > root.right.key:
-                return self.rotate_left(root)
+            if key > raiz.direita.key:
+                return self.rotacionar_esquerda(raiz)
             else:
-                root.right = self.rotate_right(root.right)
-                return self.rotate_left(root)
+                raiz.direita = self.rotacionar_direita(raiz.direita)
+                return self.rotacionar_esquerda(raiz)
 
-        return root
+        return raiz
 
-    def insert_key(self, key):
-        self.root = self.insert(self.root, key)
+    def inserir_chave(self, key):
+        self.raiz = self.inserir(self.raiz, key)
 
-    def reverse_inorder_traversal(self, root, count, sum_values):
-        if root and count[0] > 0:
-            # Traverse the right subtree
-            self.reverse_inorder_traversal(root.right, count, sum_values)
-
-            # Update sum
-            sum_values[0] += root.key
-
-            # Update count
+    def emOrdemReverso(self, raiz, count, sum_values):
+        if raiz and count[0] > 1:
+            self.emOrdemReverso(raiz.direita, count, sum_values)
+            sum_values[0] += raiz.key
             count[0] -= 1
+            self.emOrdemReverso(raiz.esquerda, count, sum_values)
 
-            # Traverse the left subtree
-            self.reverse_inorder_traversal(root.left, count, sum_values)
-
-    def print_highest_values_with_sum(self, count):
+    def MaiorSoma(self, horas_disponiveis):
         sum_values = [0]
-        self.reverse_inorder_traversal(self.root, [count], sum_values)
+        count = [horas_disponiveis]
+        self.emOrdemReverso(self.raiz, count, sum_values)
         print("valor total de conhecimento:", sum_values[0])
 
 
-# Inicializar a arvore
+
+# Inicializar a árvore
 avl_tree = AVLTree()
 # Recebendo as aulas totais
 aulasTotais = list(map(int, input().split()))
@@ -120,16 +113,17 @@ valoresHogwarts = list(map(int, input().split()))
 # Recebendo os valores Cin
 valoresCin = list(map(int, input().split()))
 
-# Adicionando os valores Hogwarts a arvore
+# Adicionando os valores Hogwarts à árvore
 for valor in valoresHogwarts:
-    avl_tree.insert_key(valor)
+    avl_tree.inserir_chave(valor)
 
-# Adicionando os valores Cin a arvore
+# Adicionando os valores Cin à árvore
 for valor in valoresCin:
-    avl_tree.insert_key(valor)
+    avl_tree.inserir_chave(valor)
 
-# Recebendo as horas disponiveis no viratempo
+# Recebendo as horas disponíveis no vira-tempo
 horasDisponiveis = int(input())
 
-# Imprimindo a soma dos maiores valores considerando as horas disponiveis no viratempo
-avl_tree.print_highest_values_with_sum(horasDisponiveis)
+
+# Imprimindo a soma dos maiores valores considerando as horas disponíveis no vira-tempo
+avl_tree.MaiorSoma(horasDisponiveis)
