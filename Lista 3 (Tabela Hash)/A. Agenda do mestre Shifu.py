@@ -1,79 +1,59 @@
-class HashTable:
+# Criando a classe TabelaHash e definindo a função de hash, como inserir elementos e como imprimir a tabela
+class TabelaHash:
     def __init__(self, size):
         self.size = size
         self.table = [None] * size
 
-    def _hash_function(self, key):
-        total = 0
-        for char in key:
-            total += ord(char)  # Adding ASCII values of characters
-        return total % self.size
+    def funcao_hash(self, value):
+        return value % self.size
 
-    def insert(self, key, value):
-        index = self._hash_function(key)
-        if self.table[index] is None:
-            self.table[index] = [(key, value)]
+    def inserir(self, key, value):
+        indice = self.funcao_hash(value)
+
+        if self.table[indice] is None:
+            self.table[indice] = [(key, value)]
         else:
-            for i, (existing_key, _) in enumerate(self.table[index]):
-                if existing_key == key:
-                    self.table[index][i] = (key, value)
-                    break
+            while self.table[indice]:
+                indice = (indice + 1) % self.size
+            self.table[indice] = [(key, value)]
+
+    def imprimir_tabela(self):
+        lista_impressao = []
+        for i, bucket in enumerate(self.table):
+            if bucket is not None:
+                for key, value in bucket:
+                    lista_impressao.append(key)
             else:
-                self.table[index].append((key, value))
-
-    def get(self, key):
-        index = self._hash_function(key)
-        if self.table[index] is not None:
-            for existing_key, value in self.table[index]:
-                if existing_key == key:
-                    return value
-        raise KeyError(f"Key '{key}' not found in the hash table.")
-
-    def remove(self, key):
-        index = self._hash_function(key)
-        if self.table[index] is not None:
-            for i, (existing_key, _) in enumerate(self.table[index]):
-                if existing_key == key:
-                    del self.table[index][i]
-                    break
-        else:
-            raise KeyError(f"Key '{key}' not found in the hash table.")
+                lista_impressao.append('vago')
+        print(lista_impressao)
 
 
-# Example usage:
-hash_table = HashTable(size=10)
+# Criando a tabela de hash:
+hash_table = TabelaHash(size=10)
 
-
-def create_groups(s):
-    groups = []
-    seen_students = set()
+# Definindo a função de criar os grupos
+def criar_grupos(s):
+    grupos = []
+    estudantes_vistos = set()
 
     for student in s:
-        if student not in seen_students:
-            seen_students.add(student)
-            groups.append(student)
+        if student not in estudantes_vistos:
+            estudantes_vistos.add(student)
+            grupos.append(student)
         else:
-            # Start a new group when a student is repeated
-            yield ''.join(groups)
-            groups = [student]
-            seen_students = {student}
+            yield grupos, sum(ord(char) for char in grupos)
+            grupos = [student]
+            estudantes_vistos = {student}
 
-    # Yield the last group
-    yield ''.join(groups)
-
-# Example usage:
-result_groups = list(create_groups(input()))
-print(result_groups)
+    yield grupos, sum(ord(char) for char in grupos)
 
 
-hash_table.insert("name", "John")
-hash_table.insert("age", 25)
-hash_table.insert("city", "New York")
+# Criando os grupos baseados na input:
+grupos_finais = list(criar_grupos(input()))
 
-print(hash_table.get("name"))  # Output: John
-print(hash_table.get("age"))  # Output: 25
-print(hash_table.get("city"))  # Output: New York
+# Inserindo cada grupo na tabela hash
+for element in grupos_finais:
+    hash_table.inserir(element[0], element[1])
 
-hash_table.remove("age")
-# Trying to access the removed key will raise a KeyError
-# print(hash_table.get("age"))  # Uncommenting this line will raise KeyError
+# Imprimindo a tabela hash
+hash_table.imprimir_tabela()

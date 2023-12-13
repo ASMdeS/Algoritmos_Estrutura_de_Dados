@@ -1,3 +1,53 @@
+class Node:
+    def __init__(self, valor):
+        self.valor = valor
+        self.pai = None
+        self.direita = None
+        self.esquerda = None
+
+
+class Arvore:
+    def __init__(self):
+        self.raiz = None
+
+    def inserir(self, valor):
+        item = Node(valor)
+
+        if self.raiz == None:
+            self.raiz = item
+
+        else:
+            adicionado = False
+            itemAtual = self.raiz
+            while not adicionado:
+                if itemAtual.valor < item.valor:
+                    if itemAtual.direita == None:
+                        itemAtual.direita = item
+                        item.pai = itemAtual
+                        adicionado = True
+                    else:
+                        itemAtual = itemAtual.direita
+                else:
+                    if itemAtual.esquerda == None:
+                        itemAtual.esquerda = item
+                        item.pai = itemAtual
+                        adicionado = True
+                    else:
+                        itemAtual = itemAtual.esquerda
+
+    def buscaCulpado(self):
+        culpado = self.raiz
+        while culpado and culpado.esquerda:
+            culpado = culpado.esquerda
+        return culpado.valor if culpado else None
+
+arvore = Arvore()
+numeros = list(map(int, input().split()))
+for num in numeros:
+    arvore.inserir(num)
+
+culpado = arvore.buscaCulpado()
+print(f"{culpado} puxou a camisa de {arvore.raiz.valor}")
 # Criando o Node
 class AVLNode:
     def __init__(self, key):
