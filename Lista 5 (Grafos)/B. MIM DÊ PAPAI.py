@@ -1,45 +1,25 @@
+# Crição da classe Grafo, com os vértices e arestas, além da função que checará se o caminho é possível
 class Grafo:
     def __init__(self, vertices):
         self.vertices = vertices
-        self.dicionario = {}
+        self.arestas = {}
         for sala, chave in self.vertices:
-            if sala in self.dicionario:
-                self.dicionario[sala].append(chave)
+            if sala in self.arestas:
+                self.arestas[sala].append(chave)
             else:
-                self.dicionario[sala] = [chave]
-        print(self.dicionario)
+                self.arestas[sala] = [chave]
 
-    def checar_possibilidade(self, sala, chave, caminho=[]):
-        caminho = caminho + [sala]
-        if sala == chave:
-            return [caminho]
-        if sala not in self.dicionario:
-            return []
 
-        lista_caminhos = []
+entrada = (input().split())
+numero_usuarios = int(entrada[0])
+conexoes_usuarios = int(entrada[1])
 
-        for node in self.dicionario[sala]:
-            if node not in caminho:
-                novos_caminhos = self.checar_possibilidade(node, chave, caminho)
-                for caminho in novos_caminhos:
-                    lista_caminhos.append(caminho)
+lista_conexoes = []
 
-        return lista_caminhos
+for i in range(0, conexoes_usuarios):
+    entrada = input()
+    lista_chaves = entrada.split()
+    lista_conexoes.append((lista_chaves[0], lista_chaves[1]))
 
-caminhos = [
-    ("1", "4"),
-    ("1", "5"),
-    ("2", "1"),
-    ("3", "10"),
-    ("3", "8"),
-    ("4", "6"),
-    ("5", "2")
-]
-
-Sala = "1"
-Chave = "6"
-
-grafo_caminhos = Grafo(caminhos)
-
-print(grafo_caminhos.checar_possibilidade(Sala, Chave))
-
+# Criando o grafo
+grafo_caminhos = Grafo(lista_conexoes)
