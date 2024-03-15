@@ -1,4 +1,4 @@
-Algoritmos e Estrutura de Dados (IF969)
+# Algoritmos e Estrutura de Dados (IF969)
 
 Este é o repositório da disciplina de Algoritmos e Estrutura de Dados da Universidade Federal de Pernambuco (UFPE). Aqui você encontrará uma variedade de materiais relacionados ao curso, incluindo listas de exercícios e implementações de algoritmos.
 Ementa da Disciplina
